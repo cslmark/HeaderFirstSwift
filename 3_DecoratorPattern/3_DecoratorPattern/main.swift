@@ -32,5 +32,8 @@ let fpBeverage = FPEspresso()
     .withSoy()
 print(fpBeverage.debugDesc)
 
+/** 重载运算符之后，优化的调用 */
+let fpBeverage2 = FPEspresso() + FPCondiment.mocha + FPCondiment.whip
+print(fpBeverage2.debugDesc)
 
 

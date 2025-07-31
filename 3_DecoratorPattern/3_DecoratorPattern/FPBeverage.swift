@@ -55,3 +55,38 @@ struct FPCondimentDecorator: FPBeverageComponent {
         return condimentCost + beverage.cost()
     }
 }
+
+/**
+ 为了直观的重载运算符引入
+ */
+enum FPCondiment {
+    case mocha
+    case soy
+    case whip
+    case custom(name: String, cost: Double)
+    
+    var name: String {
+        switch self {
+        case .mocha: return "摩卡 "
+        case .soy: return "豆浆 "
+        case .whip: return "奶泡 "
+        case .custom(let name, _): return name + " "
+        }
+    }
+    
+    var cost: Double {
+        switch self {
+        case .mocha: return 0.20
+        case .soy: return 0.8
+        case .whip: return 1.8
+        case .custom(name: _, cost: let cost): return cost
+        }
+    }
+}
+
+// 重载 + 号运算符
+// 在类型内部定义,一定要加Static
+func +(beverage: FPBeverageComponent, condiment: FPCondiment) -> FPBeverageComponent {
+    return FPCondimentDecorator(beverage: beverage, condimentName: condiment.name, condimentCost: condiment.cost)
+}
+
