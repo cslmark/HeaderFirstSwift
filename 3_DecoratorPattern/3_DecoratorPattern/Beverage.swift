@@ -10,7 +10,14 @@
  1. 可以采用接口来定义更适合
  2. 书本的类名是饮料，个人认为应该叫饮料组件更适合
  */
+enum BeverageSize {
+    case tail     // 小杯
+    case grande   // 中杯
+    case venti    // 大杯
+}
+
 protocol BeverageComponent {
+    var size: BeverageSize { set get }
     var desc: String { get }
     func cost() -> Double
 }
@@ -28,32 +35,48 @@ protocol CondimentDecorator: BeverageComponent {
 /**
  基础饮料成分实现类
  */
-class Espresso: BeverageComponent {
+class BaseBeverage: BeverageComponent {
+    var size: BeverageSize
+    
     var desc: String {
-        "浓缩咖啡"
+        fatalError("desc must be overridden by subclass")
     }
     
     func cost() -> Double {
+        fatalError("cost() must be overridden by subclass")
+    }
+    
+    init() {
+        self.size = .tail
+    }
+}
+
+class Espresso: BaseBeverage {
+    override var desc: String {
+        "浓缩咖啡"
+    }
+    
+    override func cost() -> Double {
         1.99
     }
 }
 
-class HouseBlend: BeverageComponent {
-    var desc: String {
+class HouseBlend: BaseBeverage {
+    override var desc: String {
         "家常综合"
     }
     
-    func cost() -> Double {
+    override func cost() -> Double {
         0.89
     }
 }
 
-class Orange: BeverageComponent {
-    var desc: String {
+class Orange: BaseBeverage {
+    override var desc: String {
         "橙汁"
     }
     
-    func cost() -> Double {
+    override func cost() -> Double {
         1.89
     }
 }
@@ -62,10 +85,12 @@ class Orange: BeverageComponent {
 /**调料**/
 // 创建抽象基类来消除重复的init代码
 class BaseCondimentDecorator: CondimentDecorator {
+    var size: BeverageSize
     var beverage: BeverageComponent
     
     init(beverage: BeverageComponent) {
         self.beverage = beverage
+        self.size = .tail
     }
     
     // 子类必须重写这些方法
