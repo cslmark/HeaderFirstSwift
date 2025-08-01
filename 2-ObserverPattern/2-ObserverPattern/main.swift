@@ -14,9 +14,24 @@ import Foundation
  2. 最典型的引用RxSwift代码
  */
 
+/**Simple ObserverPattern**/
+print("================= Simple ObserverPattern ================= ")
 let weatherData = WeatherData(temperature: 0.0, humidity: 0.0, pressure: 0.0)
 let displayer = CurrentConditionDisplay(weatherData: weatherData)
 weatherData.setMeasurement(temperature: 36.0, humidity: 20.0, pressure: 2)
 weatherData.setMeasurement(temperature: 18.0, humidity: 20.0, pressure: 2)
 weatherData.setMeasurement(temperature: 50.0, humidity: 20.0, pressure: 2)
 weatherData.setMeasurement(temperature: 36.0, humidity: 10.0, pressure: 2)
+
+/**RxSwift ObserverPattern**/
+print("================= RxSwift ObserverPattern ================= ")
+let obsevable = Just("Hello Rx")
+let observer = AnyObserver<String> { event in
+    switch event {
+    case .next(let value):
+        print("Receive: \(value)")
+    }
+}
+
+obsevable.subscribe(observer)
+
