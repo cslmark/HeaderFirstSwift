@@ -56,7 +56,7 @@ extension WeatherData: Subject {
     }
     
     func notifyObservers() {
-        // 这里需要过滤掉已经被释放掉的对象
+        // 这里需要过滤掉已经被释放掉的对象== 》 会自动清理 nil 引用
         let snapshot = observers.allObjects
         snapshot.forEach {
             $0.update()
