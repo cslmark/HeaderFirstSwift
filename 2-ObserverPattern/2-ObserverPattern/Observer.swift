@@ -12,6 +12,12 @@ import Foundation
     func update()
 }
 
+protocol DisplayElement {
+    func display()
+}
+
+
+/*** 主题相关 */
 protocol Subject: AnyObject {
     func addObserver(_ observer: Observer)
     func removeObserver(_ observer: Observer)
@@ -22,8 +28,22 @@ class WeatherData {
     // 目前苹果这个还没有兼容好，只能先用objc来兼容Observer
     private let observers = NSHashTable<Observer>.weakObjects()
     
-    var temp: Double?
-    var 
+    var temperature: Double
+    var humidity: Double
+    var  pressure: Double
+    
+    init(temperature: Double, humidity: Double, pressure: Double) {
+        self.temperature = temperature
+        self.humidity = humidity
+        self.pressure = pressure
+    }
+    
+    func setMeasurement(temperature: Double, humidity: Double, pressure: Double) {
+        self.temperature = temperature
+        self.humidity = humidity
+        self.pressure = pressure
+        notifyObservers()
+    }
 }
 
 extension WeatherData: Subject {
@@ -41,5 +61,30 @@ extension WeatherData: Subject {
         snapshot.forEach {
             $0.update()
         }
+    }
+}
+
+
+/*** 观察者 */
+class CurrentConditionDisplay: Observer, DisplayElement {
+    private var temperature: Double
+    private var humidity: Double
+    private var weatherData: WeatherData
+    
+    init(weatherData: WeatherData) {
+        self.weatherData = weatherData
+        self.temperature = weatherData.temperature
+        self.humidity = weatherData.humidity
+        self.weatherData.addObserver(self)
+    }
+    
+    func update() {
+        self.temperature = weatherData.temperature
+        self.humidity = weatherData.humidity
+        self.display()
+    }
+    
+    func display() {
+        print("当前温度: \(temperature), 当前湿度: \(humidity)")
     }
 }
