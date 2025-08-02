@@ -44,6 +44,12 @@ protocol DisposableNew {
     func dispose()
 }
 
+extension DisposableNew {
+    func disposed(by bg: DisposeBag) {
+        bg.insert(self)
+    }
+}
+
 struct NoDisposableNew: DisposableNew {
     func dispose() {
         // Do nothing
@@ -97,6 +103,25 @@ struct DisposesNew {
 protocol ObservableTypeNew {
     associatedtype Element
     func subscribe<O: ObserverTypeNew>(_ observer: O) -> DisposableNew where O.Element == Element
+}
+
+extension ObservableTypeNew {
+    // 更加优雅的方式实现onNext
+    func subscribe(onNext: @escaping (Element) -> Void,
+                   onComplete: (()->Void)? = nil,
+                   onError: (()->Void)? = nil) -> DisposableNew {
+        let observer = AnyObserverNew<Element> { event in
+            switch event {
+            case .error:
+                onError?()
+            case .completed:
+                onComplete?()
+            case .next(let value):
+                onNext(value)
+            }
+        }
+        return self.subscribe(observer)
+    }
 }
 
 // 创建subject

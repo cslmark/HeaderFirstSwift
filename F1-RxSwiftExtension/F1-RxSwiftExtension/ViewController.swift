@@ -33,8 +33,12 @@ class ViewController: UIViewController {
                 print("disposeFlag 按钮被点击了")
             }
         }))
+        
+        
+        rxButton.rx.tap.subscribe {
+            print("onNext 按钮被点击了")
+        }.disposed(by: self.disposeBg)
+        
     }
-
-
 }
 
