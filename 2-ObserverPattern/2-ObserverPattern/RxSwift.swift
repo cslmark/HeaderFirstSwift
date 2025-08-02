@@ -5,9 +5,11 @@
 //  Created by Smart on 2025/8/1.
 //
 
+////////////////////////// Setup 1 ///////////////////////////////////
 // 1. 泛型定义，抹除类型差异
 enum Event<Element> {
     case next(Element)
+    case completed
 }
 
 // 2. 定义Observer协议
@@ -58,4 +60,117 @@ class Just<Element>: ObservableType {
     }
 }
 
+////////////////////////// Setup 2 ///////////////////////////////////
+protocol Disposable {
+    func dispose()
+}
+
+struct NoDisposable: Disposable {
+    func dispose() {
+        // 空
+    }
+}
+
+// 在 RxSwift 中，Observable.create 用于创建一个自定义的 Observable，这个 Observable 可以发出多个事件并完成它们的生命周期。它会接受一个闭包，闭包内通过 observer 发出事件。
+// 1. 定义Observable 类型
+// 定义一个通用的ObservableType类，并且返回一个Disposable来管理资源释放
+class Observable<Element>: ObservableType {
+    private let subscirbeAction: (AnyObserver<Element>) -> Disposable
+    
+    init(subscirbeAction: @escaping (AnyObserver<Element>) -> Disposable) {
+        self.subscirbeAction = subscirbeAction
+    }
+    
+    func subscribe(_ observer: AnyObserver<Element>) {
+        _ = subscirbeAction(observer)
+    }
+}
+
+// 2. 实现Observable.create
+extension Observable {
+    static func create(_ subscirbeAction: @escaping (AnyObserver<Element>) -> Disposable) -> Observable<Element> {
+        return Observable(subscirbeAction: subscirbeAction)
+    }
+}
+
+////////////////////////// Setup 3 ///////////////////////////////////
+/**
+ 构造「可释放的订阅机制」
+ */
+
+class AnonymousDisposable: Disposable {
+    private var disposeAction: (()->Void)?
+    private var isDisposed = false
+    
+    init(_ disposeAction: @escaping ()-> Void) {
+        self.disposeAction = disposeAction
+    }
+    
+    func dispose() {
+        guard !isDisposed else {
+            return
+        }
+        isDisposed = true
+        disposeAction?()
+        disposeAction = nil
+    }
+}
+
+/// 协议也可以加便捷的初始化函数<但是外部无法访问？？？？ 加public也没有用>
+extension Disposable {
+    public static func create() -> Disposable {
+        return NoDisposable()
+    }
+    
+    public static func create(_ disposeAction: @escaping ()-> Void) -> Disposable {
+        return AnonymousDisposable(disposeAction)
+    }
+}
+
+// 所以这里用结构体的类型方法类替代
+struct Disposables {
+    static func create() -> Disposable {
+        return NoDisposable()
+    }
+    
+    static func create(_ disposeAction: @escaping ()-> Void) -> Disposable {
+        return AnonymousDisposable(disposeAction)
+    }
+}
+
+protocol ObservableType3 {
+    associatedtype Element
+    func subscribe(_ observer: AnyObserver<Element>) -> Disposable
+}
+
+class Observable3<Element>: ObservableType3 {
+    private let subscirbeAction: (AnyObserver<Element>) -> Disposable
+    
+    init(subscirbeAction: @escaping (AnyObserver<Element>) -> Disposable) {
+        self.subscirbeAction = subscirbeAction
+    }
+    
+    func subscribe(_ observer: AnyObserver<Element>) -> Disposable {
+        subscirbeAction(observer)
+    }
+}
+
+// 2. 实现Observable.create
+extension Observable3 {
+    static func create(_ subscirbeAction: @escaping (AnyObserver<Element>) -> Disposable) -> Observable3<Element> {
+        return Observable3(subscirbeAction: subscirbeAction)
+    }
+}
+
+////////////////////////// Setup 4 ///////////////////////////////////
+/**
+ 第四步：实现最基础的 Subject（类似 PublishSubject）
+ 在 RxSwift 中，Subject 是一种即是 Observable 又是 Observer 的对象，它可以：
+
+ 接收事件（作为 Observer）
+
+ 分发事件给多个订阅者（作为 Observable）
+
+ 我们实现一个最简单的 SimpleSubject<T>：
+ */
 
