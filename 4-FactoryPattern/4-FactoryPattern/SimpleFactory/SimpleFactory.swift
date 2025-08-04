@@ -7,6 +7,9 @@
 
 /**
  简 单 ⼯ ⼚ 其 实 不 是 ⼀ 个 设 计 模 式 ， 更 多 是 ⼀ 种 编 程 习 惯
+ * 一个工厂类负责创建所有产品
+ * 通过参数决定创建哪种产品
+ * 违反开闭原则：新增产品需修改工厂类
  */
 class SimplePizzaFactory {
     func createPizza(type: String) -> Pizza {

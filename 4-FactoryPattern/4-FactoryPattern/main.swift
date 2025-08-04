@@ -23,3 +23,22 @@ let simplePizzaStore = SimpleFactoryPizzaStore(simpleFactory: simpleFactory)
 simplePizzaStore.orderPizza(type: "Greek")
 
 print("============ 简单工厂 End ================")
+
+print("============ 工厂方法 Strat ================")
+let nyStore = NYPizzaStore()
+nyStore.orderPizza(type: "Chinses")
+
+let chicoStore = ChicoPizzaStore()
+chicoStore.orderPizza(type: "Greek")
+
+
+let nyStore0 = NYPizzaStore0()
+let chicoStore0 = ChicoPizzaStore0()
+nyStore0.orderPizza(type: "NYStyle")
+chicoStore0.orderPizza(type: "Chico")
+print("============ 工厂方法 End ================")
+
+print("============ 抽象工厂 Strat ================")
+
+
+print("============ 抽象工厂 End ================")
