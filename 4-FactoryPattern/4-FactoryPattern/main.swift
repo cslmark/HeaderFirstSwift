@@ -39,6 +39,6 @@ chicoStore0.orderPizza(type: "Chico")
 print("============ 工厂方法 End ================")
 
 print("============ 抽象工厂 Strat ================")
-
-
+let nyStoreNew = NYPizzaStore1()
+nyStoreNew.orderPizza(type: "Cheese")
 print("============ 抽象工厂 End ================")
