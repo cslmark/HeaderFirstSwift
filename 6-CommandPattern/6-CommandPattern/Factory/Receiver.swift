@@ -20,3 +20,38 @@ class ReceiverBase {
 class Light: ReceiverBase {
     
 }
+
+enum CeilingFanState {
+    case hight
+    case medium
+    case low
+    case off
+}
+
+public class CeilingFan {
+    var currentState: CeilingFanState = .off {
+        didSet {
+            print("CeilingFan 调整为: \(currentState)")
+        }
+    }
+    func hight() {
+        currentState = .hight
+    }
+    
+    func medium() {
+        currentState = .medium
+    }
+    
+    func low() {
+        currentState = .low
+    }
+    
+    func off() {
+        currentState = .off
+    }
+    
+    
+}
+
+
+
