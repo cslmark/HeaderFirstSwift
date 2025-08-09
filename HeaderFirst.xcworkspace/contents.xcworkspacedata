@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:6-CommandPattern/6-CommandPattern.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:5-SingleInstancePattern/5-SingleInstancePattern.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:F1-RxSwiftExtension/F1-RxSwiftExtension.xcodeproj">
    </FileRef>
    <FileRef
