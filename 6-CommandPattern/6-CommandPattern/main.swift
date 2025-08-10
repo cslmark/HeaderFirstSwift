@@ -10,6 +10,21 @@ import Foundation
 /**
  命令模式 把请求封装为对象，以便用不同的请求、队列或者日志请求来参数化其他对象
  并且支持可撤销的操作
+ 
+ 命令模式把“要做的事（请求）”封装成一个对象（Command），把请求的调用者（Invoker）和执行者（Receiver）解耦。一个命令对象包含：执行操作的方法（execute()），通常也包含撤销（undo()）或序列化信息。
+ 
+ Command（命令）：接口/协议，定义 execute()（可选 undo()）。
+
+ ConcreteCommand（具体命令）：实现命令，持有 Receiver 的引用并在 execute() 中调用 Receiver 的方法。
+
+ Receiver（接收者）：实际做事的对象（业务逻辑）。
+
+ Invoker（调用者）：触发命令（按钮、菜单、任务队列等）。
+
+ Client（客户端）：创建具体命令并把它交给调用者。
+ 
+ 优点：解耦、支持撤销/重做、队列/调度、宏命令（把多个命令合并）、日志/持久化（可重放）等。
+ 缺点：会增加类/对象数；序列化闭包/对象有难度；滥用会让代码过度抽象、难调试。
  */
 class SimpleRemoteControl {
     var slot: Command
