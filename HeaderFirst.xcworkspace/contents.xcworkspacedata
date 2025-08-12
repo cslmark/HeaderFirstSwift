@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:8-TemplatePattern/8-TemplatePattern.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:7-AdapterPattern/7-AdapterPattern.xcodeproj">
    </FileRef>
    <FileRef
