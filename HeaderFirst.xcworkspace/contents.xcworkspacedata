@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:7-AdapterPattern/7-AdapterPattern.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:F2_SnapKit_CommandPattern/F2_SnapKit_CommandPattern.xcodeproj">
    </FileRef>
    <FileRef
