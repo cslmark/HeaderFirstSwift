@@ -153,7 +153,58 @@ class Waitress {
     }
 }
 
+/***
+ 更进一步: 继续在后面新增协议
+ */
+protocol Menu {
+    func createIterator() -> any Iterator
+}
+
+extension PanckeHouseMenu: Menu {
+    func createIterator() -> any Iterator {
+        return PanckeHouseMenuIterator(head: head)
+    }
+}
+
+extension DinerMenu: Menu {
+    func createIterator() -> any Iterator {
+        return DinerMenuIterator(menuItems: menuItems)
+    }
+}
+
+class Waitress2 {
+    var hourse: PanckeHouseMenu
+    var diner: DinerMenu
+    
+    init(hourse: PanckeHouseMenu, diner: DinerMenu) {
+        self.hourse = hourse
+        self.diner = diner
+    }
+    
+    func printMenu() {
+        let pancake: any Iterator = hourse.createIterator()
+        let dinner: any Iterator = diner.createIterator()
+        printMenu(iterator: pancake)
+        printMenu(iterator: dinner)
+    }
+    
+    func printMenu(iterator: any Iterator) {
+        while iterator.hasNext() {
+            let item = iterator.next()
+            guard let item = item as? MenuItem else {
+                continue
+            }
+            print("name = \(item.name), price = \(item.price)")
+        }
+    }
+}
+
+print("第一步 ----- 调用")
 let pancake = PanckeHouseMenu()
 let diner = DinerMenu()
 let waitress = Waitress(hourse: pancake, diner: diner)
 waitress.printMenu()
+
+print("第二步 ----- 调用")
+let waitress2 = Waitress2(hourse: pancake, diner: diner)
+waitress2.printMenu()
