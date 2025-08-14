@@ -7,6 +7,17 @@
 
 import Foundation
 
+/**
+ 状态: 允许对象在内部状态改变时，改变它的行为。对象看起来好像改变了它的类
+ 1. 状态模式允许一个对象基于内部状态拥有许多不同的行为
+ 2. 和过程式状态机不同，状态模式用真正的类代表每个状态
+ 3. Context把行为委托给所组合的的当前状态对象
+ 4. 状态模式允许Context随着状态的改变而改版行为
+ 5. 状态迁移可以由state类或context类控制
+ 6.使用状态模式通常会导致设计中的类的数据增加
+ 7.状态类可以在多个Context实例内部之间共享
+ */
+
 protocol Status {
     // 塞入硬币
     func insertCoin()
@@ -53,15 +64,23 @@ class HadCoreStatus: Status {
     }
     
     func insertCoin() {
-        print("已经售罄，不接受硬币")
+        print("已经有硬币了，不需要额外投币")
     }
     
     func rotateBar() {
-        print("转动也不会有糖果")
+        print("转动ing....")
+        let luckyNum = Int.random(in: 0...9)
+        print("生成的幸运数字是: \(luckyNum)")
+        if luckyNum == 0 && machine?.count ?? 0 > 1 {
+            machine?.currentState = machine?.winnerStatus
+        } else {
+            machine?.currentState = machine?.soldStatus
+        }
     }
     
     func backCoin() {
-        print("我这里没有硬币")
+        print("硬币归还给你")
+        machine?.currentState = machine?.noCoinStatus
     }
     
     func sendCandy() {
@@ -125,12 +144,48 @@ class SoldStatus: Status {
     }
 }
 
+class WinnerStatus: Status {
+    weak var machine: CandyMachine?
+    init(machine: CandyMachine?) {
+        self.machine = machine
+    }
+    
+    func insertCoin() {
+        fatalError("这个时候不应该调用 insertCoin")
+    }
+    
+    func rotateBar() {
+        fatalError("这个时候不应该调用 rotateBar")
+    }
+    
+    func backCoin() {
+        fatalError("这个时候不应该调用 backCoin")
+    }
+    
+    func sendCandy() {
+        machine?.releaseCandy()
+        if machine?.count == 0 {
+            machine?.currentState = machine?.soldOutStatus
+        } else {
+            machine?.releaseCandy()
+            print("你是胜利者，给你2个糖")
+            if machine?.count ?? 0 > 0 {
+                machine?.currentState = machine?.noCoinStatus
+            } else {
+                print("已经没有 糖果了")
+                machine?.currentState = machine?.soldOutStatus
+            }
+        }
+    }
+}
 
-class CandyMachine {
+
+class CandyMachine: CustomStringConvertible {
     var soldOutStatus: SoldOutStatus!  // 隐式解包可选类型，自动初始化为 nil
     var noCoinStatus: NoCoreStatus!
     var hadCoinStatus: HadCoreStatus!
     var soldStatus: SoldStatus!
+    var winnerStatus: WinnerStatus!
     var currentState: (any Status)?
     var count = 0
     
@@ -147,6 +202,7 @@ class CandyMachine {
         self.noCoinStatus = NoCoreStatus(machine: self)
         self.hadCoinStatus = HadCoreStatus(machine: self)
         self.soldStatus = SoldStatus(machine: self)
+        self.winnerStatus = WinnerStatus(machine: self)
         
         self.count = count
         if count > 0 {
@@ -179,5 +235,28 @@ class CandyMachine {
             currentState = soldOutStatus
         }
     }
+    
+    var description: String {
+        return "Machinde: [\(count)] [\(String(describing: currentState.self))]"
+    }
 }
+
+/// 糖果机开始正式工作
+let gumballMachine = CandyMachine(count: 5)
+
+print(gumballMachine)
+gumballMachine.insertCoin()
+gumballMachine.rotateBar()
+print(gumballMachine)
+
+gumballMachine.insertCoin()
+gumballMachine.rotateBar()
+gumballMachine.insertCoin()
+gumballMachine.rotateBar()
+print(gumballMachine)
+
+
+
+
+
 
