@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:12-CompoundPattern/12-CompoundPattern.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:F3-MVC_MVP_MVVM_VIPER/F3-MVC_MVP_MVVM_VIPER.xcodeproj">
    </FileRef>
    <FileRef
