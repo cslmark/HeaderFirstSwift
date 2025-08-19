@@ -39,7 +39,7 @@
 
 import UIKit
 
-/// Entity
+// MARK: - Entity
 struct Person4 {
     let firstName: String
     let lastName: String
@@ -54,29 +54,90 @@ protocol GreetingProvider {
     func provideGreetingData()
 }
 
+/// 提供通知的方式
 protocol GreetingOutput: AnyObject {
     func receiveGreetingData(greetingData: GreetingData)
 }
 
+// MARK: - Interactor
+class GreetingInteractor: GreetingProvider {
+    weak var output: GreetingOutput!
+    
+    func provideGreetingData() {
+        let person = Person4(firstName: "David", lastName: "Blaine")  // 通常来源于数据访问层
+        let subject = person.firstName + " " + person.lastName
+        let greeting = GreetingData(greeting: "Hello ", subject: subject)
+        self.output.receiveGreetingData(greetingData: greeting)
+    }
+}
 
+/// UI的事件处理协议
+protocol GreetingViewEventHandler {
+    func didTapShowGreetingButton()
+}
 
-class VIPERViewController: UIViewController {
+/// UI事件更新的方法协议
+protocol GreetingNewView: AnyObject {
+    func setGreenting(greeting: String)
+}
 
+// MARK: - Presenter
+class GreetingPresenterNew: GreetingOutput, GreetingViewEventHandler {
+    weak var view: GreetingView!
+    var greetingProvider: GreetingProvider!
+    
+    func didTapShowGreetingButton() {
+        self.greetingProvider.provideGreetingData()
+    }
+    
+    func receiveGreetingData(greetingData: GreetingData) {
+        let greeting = greetingData.greeting + " " + greetingData.subject
+        self.view.setGreeting(greeting: greeting)
+    }
+}
+
+// MARK: - View
+class VIPERViewController: UIViewController, GreetingView {
+    var eventHandler: GreetingViewEventHandler!
+    var showGreetingButton: UIButton? = nil
+    var greetingLabel: UILabel?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        setupUI()
+        let presenter = GreetingPresenterNew()
+        let interactor = GreetingInteractor()
+        eventHandler = presenter
+        presenter.view = self
+        presenter.greetingProvider = interactor
+        interactor.output = presenter
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func setupUI() {
+        let button = UIButton()
+        button.frame = CGRect(x:50, y:400, width:100, height:50)
+        view.addSubview(button)
+    
+        button.addTarget(self, action: #selector(didClickButton(_:)), for: .touchUpInside)
+        button.setTitle("点我", for: .normal)
+        button.backgroundColor = .lightGray
+        self.showGreetingButton = button
+        
+        let label = UILabel()
+        label.frame = CGRect(x:50, y:300, width:100, height:50)
+        view.addSubview(label)
+        label.backgroundColor = .green
+        self.greetingLabel = label
     }
-    */
-
+    
+    /** 处理用户的输入事件*/
+    @objc func didClickButton(_ button: UIButton) {
+        print("点击了 按钮 =====")
+        self.eventHandler.didTapShowGreetingButton()
+    }
+    
+    func setGreeting(greeting: String) {
+        self.greetingLabel?.text = greeting
+    }
 }
