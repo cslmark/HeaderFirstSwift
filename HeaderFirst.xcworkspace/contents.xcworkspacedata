@@ -2,40 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:12-CompoundPattern/12-CompoundPattern.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:F3-MVC_MVP_MVVM_VIPER/F3-MVC_MVP_MVVM_VIPER.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:11-ProxyPattern/11-ProxyPattern.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:10-StatusPattern/10-StatusPattern.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:9-IteratorPattern/9-IteratorPattern.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:8-TemplatePattern/8-TemplatePattern.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:7-AdapterPattern/7-AdapterPattern.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:F2_SnapKit_CommandPattern/F2_SnapKit_CommandPattern.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:6-CommandPattern/6-CommandPattern.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:5-SingleInstancePattern/5-SingleInstancePattern.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:F1-RxSwiftExtension/F1-RxSwiftExtension.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:4-FactoryPattern/4-FactoryPattern.xcodeproj">
+      location = "group:1_StrategyPattern/1_StrategyPattern.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:2-ObserverPattern/2-ObserverPattern.xcodeproj">
@@ -44,6 +11,39 @@
       location = "group:3_DecoratorPattern/3_DecoratorPattern.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:1_StrategyPattern/1_StrategyPattern.xcodeproj">
+      location = "group:4-FactoryPattern/4-FactoryPattern.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:5-SingleInstancePattern/5-SingleInstancePattern.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:6-CommandPattern/6-CommandPattern.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:7-AdapterPattern/7-AdapterPattern.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:8-TemplatePattern/8-TemplatePattern.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:9-IteratorPattern/9-IteratorPattern.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:10-StatusPattern/10-StatusPattern.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:11-ProxyPattern/11-ProxyPattern.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:12-CompoundPattern/12-CompoundPattern.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:F1-RxSwiftExtension/F1-RxSwiftExtension.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:F2_SnapKit_CommandPattern/F2_SnapKit_CommandPattern.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:F3-MVC_MVP_MVVM_VIPER/F3-MVC_MVP_MVVM_VIPER.xcodeproj">
    </FileRef>
 </Workspace>
