@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:F3-MVC_MVP_MVVM_VIPER/F3-MVC_MVP_MVVM_VIPER.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:11-ProxyPattern/11-ProxyPattern.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:10-StatusPattern/10-StatusPattern.xcodeproj">
    </FileRef>
    <FileRef
